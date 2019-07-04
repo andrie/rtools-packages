@@ -1,19 +1,35 @@
 # Maintainer: Eric Bélanger <eric@archlinux.org>
 
-pkgname=rrdtool
+_realname=rrdtool
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=1.7.1
 pkgrel=3
 pkgdesc="Data logging and graphing application"
 arch=('x86_64')
 url="https://www.rrdtool.org"
 license=('GPL' 'custom')
-depends=('libxml2' 'pango' 'ttf-dejavu')
-makedepends=('intltool' 'ruby' 'python2-setuptools' 'tcl' 'lua51')
-optdepends=('perl: to use corresponding binding'
-	    'tcl: to use corresponding binding'
-            'python2: to use corresponding binding'
-            'ruby: to use corresponding binding'
-            'lua51: to use corresponding binding')
+makedepends=(
+    "${MINGW_PACKAGE_PREFIX}-intltool"
+    "${MINGW_PACKAGE_PREFIX}-ruby"
+    "${MINGW_PACKAGE_PREFIX}-python2-setuptools"
+    "${MINGW_PACKAGE_PREFIX}-tcl"
+    "${MINGW_PACKAGE_PREFIX}-lua51"
+    )
+depends=(
+    "${MINGW_PACKAGE_PREFIX}-libxml2"
+    "${MINGW_PACKAGE_PREFIX}-pango"
+    "${MINGW_PACKAGE_PREFIX}-ttf-dejavu"
+     )
+groups=("rtools-${_realname}")
+
+optdepends=(
+    'perl: to use corresponding binding'
+	'tcl: to use corresponding binding'
+    'python2: to use corresponding binding'
+    'ruby: to use corresponding binding'
+    'lua51: to use corresponding binding'
+    )
 options=('!emptydirs' '!makeflags')
 source=(https://oss.oetiker.ch/rrdtool/pub/rrdtool-${pkgver}.tar.gz
         rrdtool-fix-build.patch::"https://github.com/oetiker/rrdtool-1.x/commit/865a9bad.patch")
@@ -21,7 +37,7 @@ sha256sums=('989b778eda6967aa5192c73abafe43e7b10e6100776971a7e79d249942781aae'
             'ff415f4f52353dc5685c21ddbad74995f1ca4454348e52a07096aceac5089284')
 
 prepare() {
-  cd ${pkgname}-${pkgver}
+  cd "${srcdir}"/${_realname}-${pkgver}
   sed -i 's|/usr/bin/python|/usr/bin/python2|' examples/stripes.py
 
   patch -p1 -i ../rrdtool-fix-build.patch
